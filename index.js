@@ -1,5 +1,6 @@
 const express = require('express');
-const conectarDB = require('./config/db')
+const conectarDB = require('./config/db');
+const cors = require('cors')
 
 //crear el servidor
 const app = express();
@@ -7,6 +8,9 @@ const app = express();
 
 // Conectar a la base de datos
 conectarDB();
+
+//habilitar cors
+app.use(cors());
 
 // habilitar express.json(), nos va permitir datos que el usuario coloque, esto es equivalente al uso de body parser
 app.use(express.json({extended: true}))
