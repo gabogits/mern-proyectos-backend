@@ -18,7 +18,7 @@ app.use(express.json({extended: true}))
 
 
 //puesto de la app
-const PORT = process.env.PORT || 4000; //process.env.PORT HEROKU TE VA A ASIGNAR EL PUERTO QUE TENGA DSIPONIBLE
+const port = process.env.port || 4000; //process.env.PORT HEROKU TE VA A ASIGNAR EL PUERTO QUE TENGA DSIPONIBLE
 
 //Importar rutas
 
@@ -35,6 +35,6 @@ app.get('/', (req, res)=> {
 */
 
 //arrancar la app
-app.listen(PORT, ()=> {
-    console.log(`el servidor esta funcionando en el puerto ${PORT}`);
+app.listen(port, '0.0.0.0', ()=> {
+    console.log(`el servidor esta funcionando en el puerto ${port}`);
 });
