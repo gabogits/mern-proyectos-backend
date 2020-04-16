@@ -25,6 +25,7 @@ exports.crearTarea = async (req, res) => {
     const tarea = new Tarea(req.body);
     await tarea.save();
     res.json({tarea})
+    console.log("esta es la nueva tarea", {tarea})
   } catch (error) {
     console.log(error);
     res.status(500).send('Hubo un error');
@@ -35,7 +36,9 @@ exports.crearTarea = async (req, res) => {
 exports.obtenerTareas = async (req, res) => {
 
     try {
-        const { proyecto } = req.body;
+       // const { proyecto } = req.body; en la integracion del back con el from se reolvio asi
+       const { proyecto } = req.query;
+
         const proyectoExistente = await Proyecto.findById(proyecto);
         if (!proyectoExistente) {
           return res.status(404).json({ msg: "Proyecto no encontrado" });
@@ -47,7 +50,7 @@ exports.obtenerTareas = async (req, res) => {
         }
         //obtener las tarea por tareas
 
-        const tareas = await Tarea.find({proyecto})
+        const tareas = await Tarea.find({proyecto}).sort({creado: -1})
         res.json({tareas})
        
       } catch (error) {
@@ -79,12 +82,12 @@ exports.actualizarTarea = async (req, res) => {
 
         //crear un objeto con la nueva informacion
         const tareaActualizada = {}
-        if(nombre) tareaActualizada.nombre = nombre;
-        if(estado) tareaActualizada.estado = estado;
+       tareaActualizada.nombre = nombre;
+        tareaActualizada.estado = estado;
     
         //guardar la tarea
         tarea = await Tarea.findOneAndUpdate({_id : req.params.id}, tareaActualizada, {new:true});
-       res.json(tarea)
+       res.json({tarea})
       } catch (error) {
         console.log(error);
         res.status(500).send('Hubo un error');
@@ -95,7 +98,7 @@ exports.actualizarTarea = async (req, res) => {
 
 exports.eliminarTarea = async (req, res) => {
     try {
-        const { proyecto } = req.body;
+        const { proyecto } = req.query;
        //si la tarea existe o no
        let tarea= await Tarea.findById(req.params.id);
         if (!tarea) {
